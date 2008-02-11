@@ -13,14 +13,32 @@ from parser import parse
 from nltk.wordnet import *
 
 def entail(text, hyp):
+    entailment = "YES"
     hyp_tokens = hyp.split()
     text_tokens = text.split()
 
     for token in hyp_tokens:
         if token not in text_tokens:
-            return "NO"
+            synsets = get_synsets(token)
+            if len(synsets) == 0:
+                entailment = "NO"
+            for word in synsets:
+                if word not in text_tokens:
+                    entailment = "NO"
 
-    return "YES"
+    return entailment
+
+def get_synsets(word):
+    syns = []
+    if N.has_key(word):
+        synsets = N[word].synsets()
+        for s in synsets:
+            syns.extend(s.words)
+    if V.has_key(word):
+        synsets = V[word].synsets()
+        for s in synsets:
+            syns.extend(s.words)
+    return syns
 
 def evaluate(th_list):
     num_correct = 0
