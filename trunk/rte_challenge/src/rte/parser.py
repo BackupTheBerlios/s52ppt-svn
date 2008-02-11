@@ -27,5 +27,7 @@ def parse(file_name):
 
         th_list.append(th)
 
+    return th_list
+
 if __name__ == '__main__':
     parse("data/rte3_dev.xml")
